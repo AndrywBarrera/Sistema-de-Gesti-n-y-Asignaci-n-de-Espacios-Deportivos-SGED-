@@ -1,0 +1,18 @@
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.error {
+  color: #f87171; /* rojo-500 */
+  font-size: 0.875rem;
+  margin-top: 1rem;
+}
