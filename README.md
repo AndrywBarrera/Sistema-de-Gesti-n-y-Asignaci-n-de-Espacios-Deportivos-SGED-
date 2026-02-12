@@ -1,0 +1,2 @@
+# Sistema-de-Gesti-n-y-Asignaci-n-de-Espacios-Deportivos-SGED-
+Sistema de Gestión y Asignación de Espacios Deportivos (SGED) es una plataforma web creada para optimizar la administración, reserva y supervisión de escenarios deportivos en la Universidad Pedagógica y Tecnológica de Colombia (UPTC). Permite consultar disponibilidad, solicitar horarios y gestionar usuarios de forma segura y eficiente.
