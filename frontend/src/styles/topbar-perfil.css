@@ -1,0 +1,16 @@
+/* ─── TOPBAR — usuario clickeable ────────────────────────────────────────── */
+/* Agregar al final de components.css */
+
+.topbar__user--clickable {
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: 4px 6px;
+  margin: -4px -6px;
+  transition: background var(--transition);
+}
+.topbar__user--clickable:hover {
+  background: var(--surface2);
+}
+.topbar__user--clickable:hover .topbar__avatar {
+  box-shadow: 0 0 0 2px var(--accent);
+}

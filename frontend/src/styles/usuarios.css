@@ -1,0 +1,177 @@
+/* ─── USUARIOS PAGE ───────────────────────────────────────────────────────── */
+
+/* Badge de rol inline */
+.usr-rol-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Hero del modal de detalle */
+.usr-detalle-hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.usr-avatar-lg {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+.usr-detalle-nombre {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+/* ─── PROGRAMA COMBOBOX ───────────────────────────────────────────────────── */
+.pcb-root { position: relative; width: 100%; user-select: none; }
+
+/* Trigger */
+.pcb-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 0 10px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.pcb-wrap.is-open     { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-lo); }
+.pcb-wrap.is-disabled { opacity: 0.5; pointer-events: none; }
+
+.pcb-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.pcb-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 8px 0;
+}
+.pcb-input::placeholder { color: var(--text3); }
+
+.pcb-valid {
+  color: var(--verde);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.pcb-clear {
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color var(--transition), background var(--transition);
+}
+.pcb-clear:hover { color: var(--rojo); background: var(--rojo-lo); }
+
+.pcb-chevron {
+  width: 14px;
+  height: 14px;
+  color: var(--text3);
+  flex-shrink: 0;
+  transition: transform var(--transition), color var(--transition);
+}
+.pcb-chevron.is-open {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+/* Dropdown */
+.pcb-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-top: 2px solid var(--accent);
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  box-shadow: 0 10px 36px rgba(0,0,0,0.55);
+  max-height: 160px;
+  overflow-y: auto;
+  animation: cs-open 0.15s ease both;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface3) transparent;
+}
+.pcb-dropdown::-webkit-scrollbar       { width: 4px; }
+.pcb-dropdown::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+
+.pcb-count {
+  padding: 5px 12px 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--border);
+}
+
+.pcb-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 12px;
+  font-size: 13px;
+  color: var(--text2);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition), color var(--transition);
+}
+.pcb-option:last-child { border-bottom: none; }
+.pcb-option:hover      { background: var(--surface3); color: var(--text); }
+.pcb-option.is-selected {
+  background: var(--accent-lo);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.pcb-option-label { flex: 1; }
+
+.pcb-option-check {
+  width: 13px;
+  height: 13px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.pcb-empty {
+  padding: 12px;
+  font-size: 12px;
+  color: var(--text3);
+  text-align: center;
+}
+.pcb-empty em { color: var(--text2); font-style: normal; }

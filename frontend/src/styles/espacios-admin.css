@@ -1,0 +1,241 @@
+/* ─── ESPACIOS – ACCIONES ADMIN ───────────────────────────────────────────── */
+.espacio-card__actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition),
+    transform 0.15s ease;
+}
+.btn-icon:hover { transform: scale(1.1); }
+.btn-icon--edit:hover   { background: var(--accent-lo); border-color: var(--accent); }
+.btn-icon--delete:hover { background: var(--rojo-lo);   border-color: var(--rojo); }
+.btn-icon:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* ─── BOTONES GLOBALES ────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition), opacity var(--transition),
+    transform 0.15s ease;
+  white-space: nowrap;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+.btn:not(:disabled):hover  { transform: translateY(-1px); }
+.btn:not(:disabled):active { transform: translateY(0); }
+
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:not(:disabled):hover { background: #2563eb; }
+
+.btn-ghost {
+  background: var(--surface2);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+}
+.btn-ghost:not(:disabled):hover { background: var(--surface3); color: var(--text); }
+
+.btn-danger { background: var(--rojo); color: #fff; }
+.btn-danger:not(:disabled):hover { background: #dc2626; }
+
+/* ─── PAGE HEADER CON BOTÓN ──────────────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+/* ─── MODAL OVERLAY ───────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(8, 13, 26, 0.82);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* respeta la topbar dejando margen superior explícito */
+  padding: calc(var(--topbar-h) + 12px) 20px 20px;
+}
+
+/* ─── MODAL BOX ───────────────────────────────────────────────────────────── */
+.modal-box {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 620px;
+  /* altura máxima descontando topbar + margen */
+  max-height: calc(100vh - var(--topbar-h) - 40px);
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+.modal-box--sm { max-width: 420px; }
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text3);
+  font-size: 15px;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  transition: color var(--transition), background var(--transition);
+  line-height: 1;
+}
+.modal-close:hover { color: var(--text); background: var(--surface2); }
+
+.modal-body {
+  padding: 16px 20px;
+  flex: 1;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* ─── MODAL FORM ──────────────────────────────────────────────────────────── */
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 520px) { .modal-grid { grid-template-columns: 1fr; } }
+
+.modal-field { display: flex; flex-direction: column; gap: 4px; }
+.modal-field--full { grid-column: 1 / -1; }
+
+.modal-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.modal-input {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: 13px;
+  padding: 7px 11px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.modal-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-lo);
+}
+.modal-input::placeholder { color: var(--text3); }
+.modal-input option { background: var(--surface2); }
+
+.modal-textarea { resize: vertical; min-height: 64px; }
+
+/* ─── FILE UPLOAD CUSTOM ──────────────────────────────────────────────────── */
+.file-upload-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  border: 1px dashed var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.file-upload-area:hover {
+  border-color: var(--accent);
+  background: var(--accent-lo);
+}
+.file-upload-area input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+.file-upload-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.file-upload-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.file-upload-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+}
+.file-upload-hint {
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.file-upload-area.has-file { border-style: solid; border-color: var(--verde); }
+.file-upload-area.has-file .file-upload-hint { color: var(--verde); }
+
+.modal-error {
+  background: var(--rojo-lo);
+  border: 1px solid var(--rojo-md);
+  border-radius: var(--radius-sm);
+  color: var(--rojo);
+  font-size: 13px;
+  padding: 8px 13px;
+  margin-bottom: 12px;
+}

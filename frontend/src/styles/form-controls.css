@@ -1,0 +1,310 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   form-controls.css
+   Controles de formulario reutilizables: CustomSelect + CustomTimePicker
+   Usa las variables de global.css. Importa una vez en components.css.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CUSTOM SELECT
+   Componente: <CustomSelect /> en CustomSelect.jsx
+   ────────────────────────────────────────────────────────────────────────── */
+
+.cs-root {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+/* Trigger (lo que se ve cerrado) */
+.cs-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 11px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition),
+    background var(--transition);
+}
+.cs-trigger:hover  { background: var(--surface3); border-color: var(--border2); }
+.cs-trigger.is-open {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-lo);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.cs-trigger-left  { display: flex; align-items: center; gap: 7px; }
+.cs-trigger-emoji { font-size: 15px; line-height: 1; flex-shrink: 0; }
+.cs-trigger-label { flex: 1; text-align: left; }
+
+.cs-chevron {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: var(--text3);
+  transition: transform var(--transition), color var(--transition);
+}
+.cs-trigger.is-open .cs-chevron {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+/* Dropdown */
+.cs-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--surface2);
+  border: 1px solid var(--accent);
+  border-top: none;
+  border-bottom-left-radius: var(--radius-sm);
+  border-bottom-right-radius: var(--radius-sm);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+
+  /* animación de entrada */
+  animation: cs-open 0.18s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes cs-open {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Opción individual */
+.cs-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+  border-bottom: 1px solid var(--border);
+}
+.cs-option:last-child { border-bottom: none; }
+
+.cs-option:hover {
+  background: var(--surface3);
+  color: var(--text);
+}
+
+.cs-option.is-selected {
+  background: var(--accent-lo);
+  color: var(--accent);
+  font-weight: 500;
+}
+.cs-option.is-selected:hover { background: var(--accent-md); }
+
+.cs-option-emoji { font-size: 15px; line-height: 1; flex-shrink: 0; }
+.cs-option-label { flex: 1; }
+
+/* Check de seleccionado */
+.cs-check {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.cs-option.is-selected .cs-check { opacity: 1; }
+
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CUSTOM TIME PICKER
+   Componente: <CustomTimePicker /> en CustomTimePicker.jsx
+   ────────────────────────────────────────────────────────────────────────── */
+
+.ctp-root {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+/* Trigger */
+.ctp-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 11px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition),
+    background var(--transition);
+}
+.ctp-trigger:hover { background: var(--surface3); }
+.ctp-trigger.is-open {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-lo);
+}
+
+.ctp-icon  { font-size: 14px; line-height: 1; flex-shrink: 0; color: var(--text3); }
+.ctp-value { flex: 1; font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+.ctp-chevron {
+  width: 14px;
+  height: 14px;
+  color: var(--text3);
+  transition: transform var(--transition), color var(--transition);
+  flex-shrink: 0;
+}
+.ctp-trigger.is-open .ctp-chevron {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+/* Panel */
+.ctp-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 120;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  padding: 14px 16px 12px;
+  min-width: 210px;
+
+  animation: ctp-open 0.18s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes ctp-open {
+  from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+/* Cabecera del panel */
+.ctp-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.ctp-panel-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Columnas hora / minuto */
+.ctp-columns {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.ctp-col-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.ctp-separator {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text3);
+  padding-top: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Scroll de valores */
+.ctp-scroll {
+  height: 152px;
+  overflow-y: auto;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface3) transparent;
+}
+.ctp-scroll::-webkit-scrollbar       { width: 4px; }
+.ctp-scroll::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+
+.ctp-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  width: 52px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text2);
+  cursor: pointer;
+  border-radius: 0;
+  transition: background var(--transition), color var(--transition);
+  letter-spacing: 0.04em;
+}
+.ctp-item:hover { background: var(--surface3); color: var(--text); }
+.ctp-item.is-selected {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+}
+
+/* Botón OK */
+.ctp-ok {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 7px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background var(--transition), transform 0.12s;
+}
+.ctp-ok:hover  { background: #2563eb; transform: translateY(-1px); }
+.ctp-ok:active { transform: translateY(0); }
+
+
+/* ──────────────────────────────────────────────────────────────────────────
+   VARIANTE ÍCONO PREFIJO (genérica, sigue disponible para inputs normales)
+   ────────────────────────────────────────────────────────────────────────── */
+.fc-input-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.fc-input-icon > span {
+  position: absolute;
+  left: 10px;
+  font-size: 13px;
+  pointer-events: none;
+  z-index: 1;
+  line-height: 1;
+}
+.fc-input-icon > input {
+  padding-left: 30px;
+}

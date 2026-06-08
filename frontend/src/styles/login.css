@@ -1,0 +1,347 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   login.css  —  Estilos del LoginPage. Usa variables de global.css.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── SCREEN ──────────────────────────────────────────────────────────────── */
+.lp-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ─── FONDO ANIMADO ───────────────────────────────────────────────────────── */
+.lp-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.lp-bg__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+  animation: lp-float 12s ease-in-out infinite;
+}
+.lp-bg__orb--1 {
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, #3b82f6, transparent 70%);
+  top: -140px; left: -120px;
+  animation-delay: 0s;
+}
+.lp-bg__orb--2 {
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, #06b6d4, transparent 70%);
+  bottom: -100px; right: -80px;
+  animation-delay: -4s;
+}
+.lp-bg__orb--3 {
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, #10b981, transparent 70%);
+  top: 50%; left: 60%;
+  animation-delay: -8s;
+  opacity: 0.1;
+}
+
+@keyframes lp-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(20px, -30px) scale(1.05); }
+  66%       { transform: translate(-15px, 20px) scale(0.97); }
+}
+
+/* Grid sutil */
+.lp-bg__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ─── CARD ────────────────────────────────────────────────────────────────── */
+.lp-card {
+  position: relative;
+  z-index: 1;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  box-shadow:
+    0 0 0 1px rgba(59,130,246,0.06),
+    0 24px 80px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  width: 100%;
+  max-width: 400px;
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ─── BRAND ───────────────────────────────────────────────────────────────── */
+.lp-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.lp-brand__badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(59,130,246,0.4);
+  flex-shrink: 0;
+}
+.lp-brand__letter {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.lp-brand__text { display: flex; flex-direction: column; gap: 2px; }
+
+.lp-brand__name {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.lp-brand__sub {
+  font-size: 11.5px;
+  color: var(--text3);
+  line-height: 1.4;
+}
+
+/* ─── DIVIDER ─────────────────────────────────────────────────────────────── */
+.lp-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2) 30%, var(--border2) 70%, transparent);
+  margin-bottom: 24px;
+}
+
+/* ─── FORM ────────────────────────────────────────────────────────────────── */
+.lp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ─── FIELD ───────────────────────────────────────────────────────────────── */
+.lp-field { display: flex; flex-direction: column; gap: 6px; }
+
+.lp-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.lp-label__req { color: var(--accent); }
+
+/* ─── INPUT WRAP ──────────────────────────────────────────────────────────── */
+.lp-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Hint fantasma superpuesto */
+.lp-hint {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 38px;          /* mismo padding que el input */
+  font-size: 13px;
+  font-family: inherit;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 1;
+}
+.lp-hint__tail { color: var(--text3); opacity: 0.6; }
+
+.lp-input-icon-left {
+  position: absolute;
+  left: 12px;
+  color: var(--text3);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 2;
+  transition: color var(--transition);
+}
+
+.lp-input-icon-right {
+  position: absolute;
+  right: 10px;
+  color: var(--text3);
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  z-index: 2;
+  transition: color var(--transition), background var(--transition);
+}
+.lp-input-icon-right:hover { color: var(--text); background: var(--surface3); }
+
+.lp-input-badge {
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+.lp-input-badge--ok { color: var(--verde); }
+
+/* ─── INPUT ───────────────────────────────────────────────────────────────── */
+.lp-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  padding: 10px 38px 10px 36px;
+  outline: none;
+  position: relative;
+  z-index: 2;
+  background: transparent; /* deja ver el hint */
+  background-color: var(--surface2);
+  transition: border-color var(--transition), box-shadow var(--transition),
+    background-color var(--transition);
+}
+.lp-input::placeholder { color: var(--text3); }
+.lp-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-lo);
+}
+.lp-input:focus ~ .lp-input-icon-left,
+.lp-input-wrap:focus-within .lp-input-icon-left { color: var(--accent); }
+
+.lp-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── HINT TIP ────────────────────────────────────────────────────────────── */
+.lp-hint-tip {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 2px;
+}
+.lp-hint-tip kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  background: var(--surface3);
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 10px;
+  color: var(--text2);
+  margin: 0 2px;
+}
+.lp-hint-tip em { color: var(--accent); font-style: normal; }
+
+/* ─── ERROR ───────────────────────────────────────────────────────────────── */
+.lp-error {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--rojo-lo);
+  border: 1px solid var(--rojo-md);
+  border-radius: var(--radius-sm);
+  color: var(--rojo);
+  font-size: 12.5px;
+  padding: 9px 13px;
+}
+
+/* ─── SUBMIT ──────────────────────────────────────────────────────────────── */
+.lp-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 20px;
+  margin-top: 4px;
+  background: linear-gradient(135deg, var(--accent), #2563eb);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 20px rgba(59,130,246,0.3);
+  transition: opacity var(--transition), transform 0.15s ease,
+    box-shadow var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.lp-submit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.lp-submit:hover:not(:disabled)::before { opacity: 1; }
+.lp-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 28px rgba(59,130,246,0.45);
+}
+.lp-submit:active:not(:disabled) { transform: translateY(0); }
+.lp-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* Spinner dentro del botón */
+.lp-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: lp-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes lp-spin { to { transform: rotate(360deg); } }
+
+/* ─── FOOTER ──────────────────────────────────────────────────────────────── */
+.lp-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 22px;
+  font-size: 11px;
+  color: var(--text3);
+  text-align: center;
+  line-height: 1.5;
+}
