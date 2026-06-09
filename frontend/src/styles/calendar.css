@@ -1,0 +1,68 @@
+.cal-reservas-list {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.cal-reserva-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  transition: all 0.2s ease;
+}
+
+.cal-reserva-row:not(:last-child) {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cal-reserva-row:hover {
+  background-color: #f8fafc;
+}
+
+.cal-reserva-row__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.cal-reserva-row__espacio {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.cal-reserva-row__info .text-xs {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.cal-reserva-row__info .text-muted {
+  color: #6b7280;
+}
+
+.cal-reserva-row__info span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .cal-reserva-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cal-reserva-row > div:last-child {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+}

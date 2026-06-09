@@ -1,0 +1,38 @@
+.notify-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.notify-header__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.notify-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.notify-actions button,
+.notify-actions .btn {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .notify-header {
+    flex-direction: column;
+  }
+
+  .notify-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

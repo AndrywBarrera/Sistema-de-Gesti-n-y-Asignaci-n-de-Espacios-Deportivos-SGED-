@@ -1,0 +1,56 @@
+/* ─── APP LOADING ─────────────────────────────────────────────────────────── */
+/* Pantalla mientras AuthContext rehidrata la sesión al recargar */
+
+.app-loading {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 9999;
+}
+
+.app-loading__badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(245,180,0,0.45);
+  animation: al-pulse 2s ease-in-out infinite;
+}
+
+@keyframes al-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(245,180,0,0.4); }
+  50%       { box-shadow: 0 4px 34px rgba(245,180,0,0.7); }
+}
+
+.app-loading__letter {
+  font-family: 'Syne', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--accent-ink);
+  line-height: 1;
+}
+
+.app-loading__spinner {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--surface3);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: al-spin 0.7s linear infinite;
+}
+
+@keyframes al-spin { to { transform: rotate(360deg); } }
+
+.app-loading__text {
+  font-size: 13px;
+  color: var(--text3);
+  letter-spacing: 0.03em;
+}
