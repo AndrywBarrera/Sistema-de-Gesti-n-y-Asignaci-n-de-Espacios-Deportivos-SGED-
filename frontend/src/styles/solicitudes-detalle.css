@@ -33,7 +33,7 @@
   border: 1px solid var(--accent-md);
   border-radius: 20px;
   font-size: 12px;
-  color: var(--accent);
+  color: var(--accent-text);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }

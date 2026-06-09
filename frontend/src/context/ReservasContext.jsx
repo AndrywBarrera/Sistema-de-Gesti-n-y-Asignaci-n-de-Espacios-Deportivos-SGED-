@@ -20,10 +20,9 @@ import { useAuth } from "../context/AuthContext";
 import { tokenStore } from "../api/client";
 const ReservasContext = createContext(null);
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
 
 export function ReservasProvider({ children }) {
-  // ── Estado local (mock o caché en memoria) ───────────────────────────────
+  // ── Estado local (caché en memoria) ──────────────────────────────────────
   const [reservas, setReservas] = useState([]);
   const [solicitudes, setSolicitudes] = useState([]);
   const [loadingIds, setLoadingIds] = useState(new Set());
@@ -56,9 +55,16 @@ export function ReservasProvider({ children }) {
   }, [tokenStore.access, esAdministrativo]);
 
   useEffect(() => {
-    if (!tokenStore.access) return;
+    if (!user || !tokenStore.access) {
+      setReservas([]);
+      setSolicitudes([]);
+      setPendingSlots({});
+      setLoadingIds(new Set());
+      return;
+    }
     cargarCalendario();
   }, [tokenStore.access]);
+
   // ── Helpers ───────────────────────────────────────────────────────────────
   const getOcupados = useCallback(
     (dateStr, espacioId) => {
@@ -153,6 +159,10 @@ export function ReservasProvider({ children }) {
       },
       ...prev,
     ]);
+
+    // Sincronizar calendario con el servidor (no bloquea el flujo si falla)
+    cargarCalendario().catch(() => {});
+
     return nueva;
   }, []);
 
@@ -161,67 +171,48 @@ export function ReservasProvider({ children }) {
     async (solicitudId) => {
       setLoading(solicitudId, true);
       try {
-        if (!USE_MOCK) {
-          await reservasSvc.gestionarReserva(solicitudId, "aprobar", null);
+        await reservasSvc.gestionarReserva(solicitudId, "aprobar", null);
+
+        // Refrescar desde el servidor: al aprobar, el backend rechaza
+        // automáticamente las solicitudes en conflicto (RF10) y actualiza
+        // el calendario. Recargar garantiza que la tabla refleje todo eso.
+        if (esAdministrativo) {
+          await cargarSolicitudes();
         } else {
-          await new Promise((r) => setTimeout(r, 400));
+          await cargarMisSolicitudes();
         }
-
-        setSolicitudes((prev) =>
-          prev.map((s) => {
-            if (s.id !== solicitudId) return s;
-            // RF10: rechaza automáticamente otros pendientes en mismo slot
-            return { ...s, estado: "Aprobada" };
-          }),
-        );
-
-        // Mover de pending a confirmado en el mapa local
-        const sol = solicitudes.find((s) => s.id === solicitudId);
-        if (sol) {
-          setReservas((prev) => ({
-            ...prev,
-            [sol.fecha]: {
-              ...prev[sol.fecha],
-              [sol.espacioId]: [
-                ...(prev[sol.fecha]?.[sol.espacioId] ?? []),
-                sol.horarioInicio,
-              ],
-            },
-          }));
-        }
+        await cargarCalendario();
       } finally {
         setLoading(solicitudId, false);
       }
     },
-    [solicitudes],
+    [esAdministrativo],
   );
 
   // ── Rechazar reserva — PATCH /reservas/:id/gestion ───────────────────────
   // justificacion OBLIGATORIA (RF09)
-  const rechazarSolicitud = useCallback(async (solicitudId, justificacion) => {
-    setLoading(solicitudId, true);
-    try {
-      if (!USE_MOCK) {
+  const rechazarSolicitud = useCallback(
+    async (solicitudId, justificacion) => {
+      setLoading(solicitudId, true);
+      try {
         await reservasSvc.gestionarReserva(
           solicitudId,
           "rechazar",
           justificacion,
         );
-      } else {
-        await new Promise((r) => setTimeout(r, 400));
-      }
 
-      setSolicitudes((prev) =>
-        prev.map((s) =>
-          s.id === solicitudId
-            ? { ...s, estado: "Rechazada", justificacion }
-            : s,
-        ),
-      );
-    } finally {
-      setLoading(solicitudId, false);
-    }
-  }, []);
+        // Refrescar la tabla desde el servidor
+        if (esAdministrativo) {
+          await cargarSolicitudes();
+        } else {
+          await cargarMisSolicitudes();
+        }
+      } finally {
+        setLoading(solicitudId, false);
+      }
+    },
+    [esAdministrativo],
+  );
 
   function cancelarSolicitud({ fecha, espacioId, horasEliminar }) {
     // Eliminar horas del pendingSlots
@@ -258,9 +249,7 @@ export function ReservasProvider({ children }) {
   const cancelarReserva = useCallback(async (solicitudId, espacioId, fecha, horarios_elegidos) => {
     setLoading(solicitudId, true);
     try {
-      if (!USE_MOCK) {
-        await reservasSvc.cancelarReserva(solicitudId);
-      } 
+      await reservasSvc.cancelarReserva(solicitudId);
 
       setSolicitudes((prev) =>
         prev.map((s) =>
@@ -269,6 +258,9 @@ export function ReservasProvider({ children }) {
       );
 
       cancelarSolicitud({ fecha, espacioId, horasEliminar: horarios_elegidos });
+
+      // Sincronizar con el servidor: el slot cancelado vuelve a estar libre.
+      cargarCalendario().catch(() => {});
     } finally {
       setLoading(solicitudId, false);
     }

@@ -43,8 +43,8 @@
 .btn:not(:disabled):hover  { transform: translateY(-1px); }
 .btn:not(:disabled):active { transform: translateY(0); }
 
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:not(:disabled):hover { background: #2563eb; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.btn-primary:not(:disabled):hover { background: #e0a500; }
 
 .btn-ghost {
   background: var(--surface2);
@@ -67,18 +67,8 @@
 }
 
 /* ─── MODAL OVERLAY ───────────────────────────────────────────────────────── */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(8, 13, 26, 0.82);
-  backdrop-filter: blur(6px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* respeta la topbar dejando margen superior explícito */
-  padding: calc(var(--topbar-h) + 12px) 20px 20px;
-}
+/* La definición de .modal-overlay vive ahora SOLO en components.css
+   para evitar conflictos de cascada y z-index. No redefinir aquí. */
 
 /* ─── MODAL BOX ───────────────────────────────────────────────────────────── */
 .modal-box {
@@ -95,6 +85,11 @@
   overflow: visible;
 }
 .modal-box--sm { max-width: 420px; }
+
+/* Variante para modales con contenido largo y SIN dropdowns que deban salirse
+   de la caja (ej. modal de gráficas). Contiene el scroll dentro del recuadro
+   para que header/footer queden fijos y nada se asome por detrás. */
+.modal-box--scroll { overflow: hidden; }
 
 .modal-header {
   display: flex;
@@ -125,7 +120,18 @@
 
 .modal-body {
   padding: 16px 20px;
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;       /* permite que el body se encoja dentro del flex */
+}
+
+/* Solo los modales que contienen su propio scroll (sin dropdowns que deban
+   salirse) activan el scroll interno en el body. Así los formularios con
+   CustomSelect/Combobox conservan sus dropdowns sin recorte. */
+.modal-box--scroll .modal-body {
+  overflow-y: auto;
+  overflow-x: visible;
+  /* espacio inferior para que los dropdowns del último campo tengan aire */
+  padding-bottom: 28px;
 }
 
 .modal-footer {
@@ -238,4 +244,8 @@
   font-size: 13px;
   padding: 8px 13px;
   margin-bottom: 12px;
+}
+
+.modal-box--scroll-none {
+  overflow-y: none;
 }

@@ -104,7 +104,7 @@
 }
 .pcb-chevron.is-open {
   transform: rotate(180deg);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Dropdown */
@@ -118,7 +118,7 @@
   border: 1px solid var(--border2);
   border-top: 2px solid var(--accent);
   border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-  box-shadow: 0 10px 36px rgba(0,0,0,0.55);
+  box-shadow: 0 10px 28px rgba(17,24,39,0.15);
   max-height: 160px;
   overflow-y: auto;
   animation: cs-open 0.15s ease both;
@@ -155,7 +155,7 @@
 .pcb-option:hover      { background: var(--surface3); color: var(--text); }
 .pcb-option.is-selected {
   background: var(--accent-lo);
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 500;
 }
 
@@ -164,7 +164,7 @@
 .pcb-option-check {
   width: 13px;
   height: 13px;
-  color: var(--accent);
+  color: var(--accent-text);
   flex-shrink: 0;
 }
 

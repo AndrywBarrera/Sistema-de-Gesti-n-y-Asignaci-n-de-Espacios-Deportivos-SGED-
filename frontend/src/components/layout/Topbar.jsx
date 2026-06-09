@@ -13,9 +13,9 @@ const PAGE_TITLES = {
 };
 
 const ROLE_COLORS = {
-  Estudiante:     "var(--accent)",
+  Estudiante:     "#b45309",
   Docente:        "var(--verde)",
-  Administrativo: "var(--amarillo)",
+  Administrativo: "#a16207",
   Empleado:       "var(--text2)",
   Administrador:  "var(--rojo)",
 };
@@ -192,7 +192,7 @@ function PerfilModal({ user, onClose, onUpdate }) {
                   width:52, height:52, borderRadius:14, flexShrink:0,
                   background:`linear-gradient(135deg,var(--accent),var(--accent2))`,
                   display:"flex", alignItems:"center", justifyContent:"center",
-                  fontFamily:"'Syne',sans-serif", fontSize:20, fontWeight:800, color:"#fff",
+                  fontFamily:"'Syne',sans-serif", fontSize:20, fontWeight:800, color:"var(--accent-ink)",
                 }}>
                   {initials}
                 </div>

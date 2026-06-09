@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { DIAS_SEMANA_LARGO, MESES } from "../../data/mockData";
+import { DIAS_SEMANA_LARGO, MESES } from "../../data/constants";
 import { useCalendar } from "../../hooks/useCalendar";
 import { useAuth } from "../../context/AuthContext";
 import { ModalOverlay, Button, Divider } from "../ui/index";
 import { Icon } from "../ui/Icons";
 import { ReservaForm } from "../reservas/ReservaForm";
+import { formatHora } from "../../utils/formatHora";
 
 const SLOT_CLASS = {
   libre:    "slot--libre",
@@ -42,6 +43,14 @@ export function DayModal({ año, mes, dia, espacioId, espacio, onClose, onSucces
   const handleSuccess = () => {
     onSuccess?.();
     onClose();
+  };
+
+  // Tras un error de backend (ej: horario ya ocupado), el contexto ya recargó
+  // los datos. Limpiamos la selección local y volvemos a la grilla de horarios,
+  // que ahora reflejará la disponibilidad actualizada.
+  const handleError = () => {
+    setSelectedHoras([]);
+    setShowForm(false);
   };
 
   return (
@@ -89,7 +98,7 @@ export function DayModal({ año, mes, dia, espacioId, espacio, onClose, onSucces
                     ].join(" ")}
                     onClick={() => puede("puedeReservar") && toggleHora(hora, estado)}
                   >
-                    <span className="slot__time">{hora} – {horaFin}</span>
+                    <span className="slot__time">{formatHora(hora)} – {formatHora(horaFin)}</span>
                     <span className="slot__label">
                       {isSelected ? "✓ Seleccionado" : SLOT_LABEL[estado]}
                     </span>
@@ -106,7 +115,7 @@ export function DayModal({ año, mes, dia, espacioId, espacio, onClose, onSucces
                 </p>
                 <div className="slot-summary__chips">
                   {[...selectedHoras].sort().map((h) => (
-                    <span key={h} className="chip">{h}</span>
+                    <span key={h} className="chip">{formatHora(h)}</span>
                   ))}
                 </div>
                 {!showForm && (
@@ -139,6 +148,7 @@ export function DayModal({ año, mes, dia, espacioId, espacio, onClose, onSucces
                 horarios={selectedHoras}
                 onBack={() => setShowForm(false)}
                 onSuccess={handleSuccess}
+                onError={handleError}
               />
             ) : (
               <div className="day-modal__form-placeholder">

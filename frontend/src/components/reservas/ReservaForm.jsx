@@ -4,10 +4,11 @@ import { useReservas } from "../../context/ReservasContext";
 import { useNotif } from "../../context/NotifContext";
 import { Button, FormGroup, Input, Textarea } from "../ui/index";
 import { Icon } from "../ui/Icons";
+import { formatHora } from "../../utils/formatHora";
 
-export function ReservaForm({ espacio, dateStr, horarios, onBack, onSuccess }) {
+export function ReservaForm({ espacio, dateStr, horarios, onBack, onSuccess, onError }) {
   const { user } = useAuth();
-  const { enviarSolicitud } = useReservas();
+  const { enviarSolicitud, recargarSolicitudes } = useReservas();
   const { agregar, showToast } = useNotif();
 
   const [motivo, setMotivo] = useState("");
@@ -33,23 +34,41 @@ export function ReservaForm({ espacio, dateStr, horarios, onBack, onSuccess }) {
     setLoading(true);
     setError("");
 
-    enviarSolicitud({
-      usuario: user,
-      espacioId: espacio.id,
-      espacioNombre: espacio.nombre,
-      fecha: dateStr,
-      horarios: horasOrdenadas,
-      motivo: motivo.trim(),
-      participantes,
-    });
-    // RF13: notificación automática al usuario
-    
-    await agregar();
-    
+    try {
+      await enviarSolicitud({
+        usuario: user,
+        espacioId: espacio.id,
+        espacioNombre: espacio.nombre,
+        fecha: dateStr,
+        horarios: horasOrdenadas,
+        motivo: motivo.trim(),
+        participantes,
+      });
 
-    showToast("✓ Solicitud enviada. Pendiente de aprobación.");
-    setLoading(false);
-    onSuccess?.();
+      // RF13: notificación automática al usuario
+      await agregar();
+
+      showToast("✓ Solicitud enviada. Pendiente de aprobación.");
+      onSuccess?.();
+    } catch (err) {
+      // El backend devuelve el detalle del error (ej: horario ya reservado).
+      // Lo mostramos y refrescamos las tablas para que el horario ocupado
+      // desaparezca de las opciones seleccionables.
+      const msg =
+        err?.message ?? "No se pudo enviar la solicitud. Intenta de nuevo.";
+      setError(msg);
+      showToast(msg, "danger");
+      try {
+        await recargarSolicitudes();
+      } catch {
+        /* si la recarga falla, el error principal ya quedó visible */
+      }
+      // Volver a la grilla de horarios ya actualizada (el slot en conflicto
+      // dejará de aparecer como disponible). El toast mantiene visible el error.
+      onError?.();
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -69,7 +88,7 @@ export function ReservaForm({ espacio, dateStr, horarios, onBack, onSuccess }) {
         <div className="reserva-form__summary-row">
           <span className="text-muted text-sm">Horario</span>
           <span>
-            {horasOrdenadas[0]} – {horaFin} ({horasOrdenadas.length}h)
+            {formatHora(horasOrdenadas[0])} – {formatHora(horaFin)} ({horasOrdenadas.length}h)
           </span>
         </div>
         <div className="reserva-form__summary-row">

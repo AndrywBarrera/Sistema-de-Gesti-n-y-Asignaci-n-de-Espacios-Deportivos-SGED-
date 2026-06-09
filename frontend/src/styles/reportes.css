@@ -53,7 +53,7 @@
   display: flex; flex-direction: column; align-items: center;
   gap: 4px; text-align: center;
 }
-.rp-dato__val   { font-family:'Syne',sans-serif; font-size:22px; font-weight:700; color:var(--accent); line-height:1; }
+.rp-dato__val   { font-family:'Syne',sans-serif; font-size:22px; font-weight:700; color: var(--accent-text); line-height:1; }
 .rp-dato__label { font-size:11px; color:var(--text3); text-transform:capitalize; line-height:1.3; }
 
 /* Meta grid modal */
@@ -86,6 +86,15 @@
   letter-spacing: 0.05em;
   margin-bottom: 12px;
 }
+.rp-empty-chart {
+  font-size: 13px;
+  color: var(--text3);
+  text-align: center;
+  padding: 36px 12px;
+  background: var(--surface2);
+  border: 1px dashed var(--border2);
+  border-radius: var(--radius-sm);
+}
 
 /* ─── HEATMAP ─────────────────────────────────────────────────────────────── */
 .heatmap-header {
@@ -112,10 +121,10 @@
 }
 .heatmap-cell:hover { transform: scale(1.3); z-index: 1; position: relative; }
 .heatmap-cell--0 { background: var(--surface3); }
-.heatmap-cell--1 { background: rgba(59,130,246,0.25); }
-.heatmap-cell--2 { background: rgba(59,130,246,0.50); }
-.heatmap-cell--3 { background: rgba(59,130,246,0.75); }
-.heatmap-cell--4 { background: #3b82f6; box-shadow: 0 0 8px rgba(59,130,246,0.5); }
+.heatmap-cell--1 { background: rgba(245,180,0,0.30); }
+.heatmap-cell--2 { background: rgba(245,180,0,0.55); }
+.heatmap-cell--3 { background: rgba(245,180,0,0.80); }
+.heatmap-cell--4 { background: #f5b400; box-shadow: 0 0 8px rgba(245,180,0,0.55); }
 .heatmap-legend {
   display: flex; align-items: center; gap: 6px;
   margin-top: 8px;
@@ -146,7 +155,7 @@
   background: var(--surface2);
   border: 1px solid var(--border2);
   border-radius: var(--radius);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  box-shadow: 0 12px 32px rgba(17,24,39,0.16);
   padding: 14px;
   min-width: 260px;
   animation: ctp-open 0.18s cubic-bezier(0.4,0,0.2,1) both;
@@ -183,10 +192,10 @@
   transition: background var(--transition), color var(--transition);
 }
 .cdp-day:hover    { background: var(--surface3); color: var(--text); }
-.cdp-day.is-today { color: var(--accent); font-weight: 700; background: var(--accent-lo); }
+.cdp-day.is-today { color: var(--accent-text); font-weight: 700; background: var(--accent-lo); }
 .cdp-day.is-selected {
-  background: var(--accent); color: #fff; font-weight: 700;
-  box-shadow: 0 2px 8px rgba(59,130,246,0.4);
+  background: var(--accent); color: var(--accent-ink); font-weight: 700;
+  box-shadow: 0 2px 8px rgba(245,180,0,0.45);
 }
 
 .cdp-clear {

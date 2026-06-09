@@ -6,7 +6,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth }  from "../context/AuthContext";
 import { useNotif } from "../context/NotifContext";
 import * as usuariosSvc from "../services/usuariosService";
-import { StatCard, Badge, EmptyState } from "../components/ui/index";
+import { StatCard, Badge, EmptyState, ModalPortal } from "../components/ui/index";
 import { CustomSelect }     from "../components/ui/CustomSelect";
 import { ProgramaCombobox } from "../components/ui/ProgramaCombobox";
 
@@ -21,8 +21,8 @@ const DEPENDENCIAS = [
 ];
 
 const ROLE_COLOR = {
-  Estudiante:"#3b82f6", Docente:"#10b981", Administrativo:"#f59e0b",
-  Empleado:"#94a3b8",   Administrador:"#ef4444",
+  Estudiante:"#b8860b", Docente:"#15803d", Administrativo:"#0891b2",
+  Empleado:"#64748b",   Administrador:"#dc2626",
 };
 
 const ROLE_OPTS = ROLES.map(r => ({ value:r, label:r }));
@@ -74,6 +74,7 @@ function ConfirmDatosModal({ open, form, esEditar, onConfirm, onClose, loading }
   });
 
   return (
+    <ModalPortal>
     <div className="modal-overlay animate-fadeIn" onClick={onClose}>
       <div className="modal-box modal-box--sm animate-slideUp"
         onClick={e => e.stopPropagation()}>
@@ -116,6 +117,7 @@ function ConfirmDatosModal({ open, form, esEditar, onConfirm, onClose, loading }
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
@@ -198,8 +200,9 @@ function UsuarioModal({ open, onClose, onGuardado, usuarioEditar }) {
 
   return (
     <>
+      <ModalPortal>
       <div className="modal-overlay animate-fadeIn" onClick={onClose}>
-        <div className="modal-box animate-slideUp" style={{ maxWidth:560 }}
+        <div className="modal-box modal-box--scroll-none animate-slideUp" style={{ maxWidth:560 }}
           onClick={e => e.stopPropagation()}>
           <div className="modal-header">
             <h2 className="modal-title font-syne">
@@ -208,7 +211,7 @@ function UsuarioModal({ open, onClose, onGuardado, usuarioEditar }) {
             <button className="modal-close" onClick={onClose}>✕</button>
           </div>
 
-          <div className="modal-body">
+          <div className="modal-body modal-box--scroll-none">
             {error && <div className="modal-error">{error}</div>}
             <div className="modal-grid">
 
@@ -282,6 +285,14 @@ function UsuarioModal({ open, onClose, onGuardado, usuarioEditar }) {
                   options={ROLE_OPTS} />
               </div>
 
+              {/* Dependencia */}
+              <div className="modal-field">
+                <label className="modal-label">Dependencia</label>
+                <CustomSelect name="dependencia" value={form.dependencia}
+                  onChange={e => setDirect("dependencia", e.target.value)}
+                  options={DEP_OPTS} placeholder="Seleccionar…" />
+              </div>
+
               {/* Teléfono */}
               <div className="modal-field">
                 <label className="modal-label">Teléfono</label>
@@ -296,13 +307,7 @@ function UsuarioModal({ open, onClose, onGuardado, usuarioEditar }) {
                   value={form.codigo_inst} onChange={set("codigo_inst")} disabled={esEditar}/>
               </div>
 
-              {/* Dependencia */}
-              <div className="modal-field">
-                <label className="modal-label">Dependencia</label>
-                <CustomSelect name="dependencia" value={form.dependencia}
-                  onChange={e => setDirect("dependencia", e.target.value)}
-                  options={DEP_OPTS} placeholder="Seleccionar…" />
-              </div>
+              
 
               
 
@@ -319,6 +324,7 @@ function UsuarioModal({ open, onClose, onGuardado, usuarioEditar }) {
           </div>
         </div>
       </div>
+      </ModalPortal>
 
       {/* Modal de confirmación de datos */}
       <ConfirmDatosModal
@@ -348,8 +354,9 @@ function DetalleUsuarioModal({ usuario, onClose, onEditar }) {
     ["Estado",        usuario.activo ? "Activo" : "Inactivo"],
   ];
   return (
+    <ModalPortal>
     <div className="modal-overlay animate-fadeIn" onClick={onClose}>
-      <div className="modal-box modal-box--sm animate-slideUp"
+      <div className="modal-box modal-box--sm modal-box--scroll animate-slideUp"
         onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title font-syne">Perfil de usuario</h2>
@@ -372,11 +379,17 @@ function DetalleUsuarioModal({ usuario, onClose, onEditar }) {
           <div style={{ display:"flex", flexDirection:"column", gap:0, marginTop:12 }}>
             {filas.map(([label, value]) => (
               <div key={label} className="detalle-row"
-                style={{ padding:"8px 0", borderBottom:"1px solid var(--border)" }}>
-                <span className="detalle-label">{label}</span>
+                style={{
+                  padding:"10px 0", borderBottom:"1px solid var(--border)",
+                  alignItems:"flex-start", gap:16,
+                }}>
+                <span className="detalle-label" style={{ flexShrink:0, paddingTop:1 }}>
+                  {label}
+                </span>
                 <span className="detalle-value" style={{
-                  textAlign:"right", maxWidth:240,
-                  overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap",
+                  textAlign:"right", minWidth:0, flex:1,
+                  wordBreak:"break-word", overflowWrap:"anywhere",
+                  whiteSpace:"normal", lineHeight:1.4,
                 }}>
                   {value}
                 </span>
@@ -393,6 +406,7 @@ function DetalleUsuarioModal({ usuario, onClose, onEditar }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
@@ -400,6 +414,7 @@ function DetalleUsuarioModal({ usuario, onClose, onEditar }) {
 function ConfirmAccionModal({ open, titulo, mensaje, advertencia, onConfirm, onClose, loading, variante="danger" }) {
   if (!open) return null;
   return (
+    <ModalPortal>
     <div className="modal-overlay animate-fadeIn" onClick={onClose}>
       <div className="modal-box modal-box--sm animate-slideUp"
         onClick={e => e.stopPropagation()}>
@@ -427,6 +442,7 @@ function ConfirmAccionModal({ open, titulo, mensaje, advertencia, onConfirm, onC
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
@@ -490,7 +506,7 @@ export function UsuariosPage() {
         setUsuarios(prev => prev.map(u => u._id===id ? {...u, activo:false} : u));
         showToast("Usuario desactivado.");
       } else {
-        await usuariosSvc.actualizarUsuario(id, { activo: true });
+        await usuariosSvc.activarUsuario(id);
         setUsuarios(prev => prev.map(u => u._id===id ? {...u, activo:true} : u));
         showToast("✓ Usuario reactivado.");
       }
@@ -559,7 +575,7 @@ export function UsuariosPage() {
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            Gestión de <span style={{ color:"var(--accent)" }}>Usuarios</span>
+            Gestión de <span style={{ color:"var(--accent-text)" }}>Usuarios</span>
           </h1>
           <p className="page-sub">Administra perfiles, roles y permisos del sistema (RF15)</p>
         </div>

@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { MESES } from "../data/mockData";
+import { MESES } from "../data/constants";
 import { CalendarGrid } from "../components/calendar/CalendarGrid";
 import { DayModal } from "../components/calendar/DayModal";
-import { IconBtn } from "../components/ui/index";
+import { IconBtn, ModalPortal } from "../components/ui/index";
 import { Icon } from "../components/ui/Icons";
 import { useAuth } from "../context/AuthContext";
 import { useReservas } from "../context/ReservasContext";
 import { useNotif } from "../context/NotifContext";
 import { CustomSelect } from "../components/ui/CustomSelect";
+import { formatHora } from "../utils/formatHora";
 
 const TODAY = new Date();
 
@@ -30,6 +31,7 @@ const ESTADO_COLOR = {
 function CancelarModal({ reserva, onConfirm, onClose, loading }) {
   if (!reserva) return null;
   return (
+    <ModalPortal>
     <div className="modal-overlay animate-fadeIn" onClick={onClose}>
       <div
         className="modal-box modal-box--sm animate-slideUp"
@@ -48,7 +50,7 @@ function CancelarModal({ reserva, onConfirm, onClose, loading }) {
               {reserva.espacio_nombre ?? reserva.espacioNombre}
             </strong>{" "}
             el <strong style={{ color: "var(--text)" }}>{reserva.fecha}</strong>{" "}
-            de {reserva.horarioInicio} a {reserva.horarioFin}?
+            de {formatHora(reserva.horarioInicio)} a {formatHora(reserva.horarioFin)}?
           </p>
         </div>
         <div className="modal-footer">
@@ -69,6 +71,7 @@ function CancelarModal({ reserva, onConfirm, onClose, loading }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
@@ -152,8 +155,8 @@ export function CalendarioPage() {
       );
       showToast("Reserva cancelada correctamente.");
       setCancelTarget(null);
-    } catch {
-      showToast("Error al cancelar la reserva.");
+    } catch (err) {
+      showToast(err?.message ?? "Error al cancelar la reserva.", "danger");
     } finally {
       setCancelando(false);
     }
@@ -165,7 +168,7 @@ export function CalendarioPage() {
         <div>
           <h1 className="page-title">
             Calendario de{" "}
-            <span style={{ color: "var(--accent)" }}>Reservas</span>
+            <span style={{ color: "var(--accent-text)" }}>Reservas</span>
           </h1>
           <p className="page-sub">
             Visualiza disponibilidad y solicita reservas. Haz clic en un día
@@ -227,8 +230,8 @@ export function CalendarioPage() {
                 {espacio.estado}
               </span>
               <span className="text-sm text-muted">
-                Cap. {espacio.capacidad} · {espacio.horarioApertura}–
-                {espacio.horarioCierre}
+                Cap. {espacio.capacidad} · {formatHora(espacio.horarioApertura)}–
+                {formatHora(espacio.horarioCierre)}
               </span>
             </div>
           )}
@@ -285,7 +288,7 @@ export function CalendarioPage() {
                         {s.espacio_nombre ?? s.espacioNombre}
                       </span>
                       <span className="text-xs text-muted">
-                        📅 {s.fecha} · 🕐 {s.horarioInicio} – {s.horarioFin}
+                        📅 {s.fecha} · 🕐 {formatHora(s.horarioInicio)} – {formatHora(s.horarioFin)}
                       </span>
                       {s.motivoReserva && (
                         <span

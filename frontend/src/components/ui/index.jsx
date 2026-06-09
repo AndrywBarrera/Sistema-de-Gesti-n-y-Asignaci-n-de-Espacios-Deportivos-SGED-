@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useNotif } from "../../context/NotifContext";
 
 /* ─── BUTTON ─────────────────────────────────────────────────────────────── */
@@ -169,6 +170,16 @@ export function Toast() {
   );
 }
 
+/* ─── MODAL PORTAL ───────────────────────────────────────────────────────── */
+/* Renderiza su contenido en document.body, fuera de .sged-content, la topbar
+   y la sidebar. Así el overlay (z-index 1000 + blur) cubre SIEMPRE toda la
+   pantalla, sin quedar atrapado por los contextos de apilamiento de la página
+   (animaciones con transform, overflow, position:sticky, etc.).
+   Envuelve cualquier <div className="modal-overlay">…</div> con este componente. */
+export function ModalPortal({ children }) {
+  return createPortal(children, document.body);
+}
+
 /* ─── MODAL OVERLAY ──────────────────────────────────────────────────────── */
 export function ModalOverlay({ children, onClose }) {
   useEffect(() => {
@@ -178,12 +189,14 @@ export function ModalOverlay({ children, onClose }) {
   }, [onClose]);
 
   return (
-    <div
-      className="modal-overlay"
-      onClick={(e) => { if (e.target.classList.contains("modal-overlay")) onClose?.(); }}
-    >
-      {children}
-    </div>
+    <ModalPortal>
+      <div
+        className="modal-overlay"
+        onClick={(e) => { if (e.target.classList.contains("modal-overlay")) onClose?.(); }}
+      >
+        {children}
+      </div>
+    </ModalPortal>
   );
 }
 

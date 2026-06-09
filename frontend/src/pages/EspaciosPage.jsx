@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Card, Badge } from "../components/ui/index";
+import { Card, Badge, ModalPortal } from "../components/ui/index";
 import { useAuth } from "../context/AuthContext";
 import { CustomSelect }     from "../components/ui/CustomSelect";
 import { CustomTimePicker } from "../components/ui/CustomTimePicker";
+import { formatHora } from "../utils/formatHora";
 
 // ─── REEMPLAZA CON TUS IMPORTS DE SERVICIO ───────────────────────────────────
 import {
@@ -18,8 +19,8 @@ const TIPO_EMOJI = {
   Cancha: "⚽", Gimnasio: "💪", Piscina: "🏊", Pista: "🏃", Otro: "🏟️",
 };
 const ACCENT_COLOR = {
-  Cancha: "#3b82f6", Gimnasio: "#10b981", Piscina: "#06b6d4",
-  Pista: "#f59e0b", Otro: "#8b5cf6",
+  Cancha: "#f5b400", Gimnasio: "#15803d", Piscina: "#0891b2",
+  Pista: "#b45309", Otro: "#7c3aed",
 };
 
 const TIPOS_OPTIONS  = ["Cancha", "Gimnasio", "Piscina", "Pista", "Otro"]
@@ -81,10 +82,14 @@ function EspacioModal({ open, onClose, onSaved, espacioEditar }) {
         await subirImagen(saved.id, imagen);
       }
 
+      // Avisar a otras vistas (Reportes) que los espacios cambiaron,
+      // para que recarguen sus estadísticas.
+      window.dispatchEvent(new Event("sged:espacios-actualizados"));
+
       onSaved();
       onClose();
     } catch (e) {
-      setError(e?.response?.data?.detail ?? "Ocurrió un error. Intenta de nuevo.");
+      setError(e?.message ?? "Ocurrió un error. Intenta de nuevo.");
     } finally {
       setLoading(false);
     }
@@ -93,8 +98,9 @@ function EspacioModal({ open, onClose, onSaved, espacioEditar }) {
   if (!open) return null;
 
   return (
+    <ModalPortal>
     <div className="modal-overlay animate-fadeIn" onClick={onClose}>
-      <div className="modal-box animate-slideUp" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-box modal-box--scroll animate-slideUp" onClick={(e) => e.stopPropagation()}>
 
         <div className="modal-header">
           <h2 className="modal-title font-syne">
@@ -215,6 +221,7 @@ function EspacioModal({ open, onClose, onSaved, espacioEditar }) {
 
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
@@ -222,6 +229,7 @@ function EspacioModal({ open, onClose, onSaved, espacioEditar }) {
 function ConfirmModal({ open, onClose, onConfirm, nombre, loading }) {
   if (!open) return null;
   return (
+    <ModalPortal>
     <div className="modal-overlay animate-fadeIn" onClick={onClose}>
       <div className="modal-box modal-box--sm animate-slideUp"
         onClick={(e) => e.stopPropagation()}>
@@ -244,6 +252,7 @@ function ConfirmModal({ open, onClose, onConfirm, nombre, loading }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
@@ -275,6 +284,7 @@ export function EspaciosPage() {
     try {
       await eliminarEspacio(espacioEliminar.id);
       await cargar();
+      window.dispatchEvent(new Event("sged:espacios-actualizados"));
     } finally {
       setDeletingId(null);
       setConfirmOpen(false);
@@ -286,7 +296,7 @@ export function EspaciosPage() {
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            Espacios <span style={{ color: "var(--accent)" }}>Deportivos</span>
+            Espacios <span style={{ color: "var(--accent-text)" }}>Deportivos</span>
           </h1>
           <p className="page-sub">
             Catálogo de instalaciones deportivas disponibles en la UPTC · Sogamoso
@@ -308,7 +318,7 @@ export function EspaciosPage() {
             <div className="espacio-card__meta">
               <div className="espacio-card__meta-row"><span>📍</span><span>{e.ubicacion}</span></div>
               <div className="espacio-card__meta-row"><span>👥</span><span>Capacidad: {e.capacidad} personas</span></div>
-              <div className="espacio-card__meta-row"><span>🕐</span><span>{e.horarioApertura} – {e.horarioCierre}</span></div>
+              <div className="espacio-card__meta-row"><span>🕐</span><span>{formatHora(e.horarioApertura)} – {formatHora(e.horarioCierre)}</span></div>
             </div>
             <div className="espacio-card__footer">
               <Badge label={e.estado} variant={e.estado} />

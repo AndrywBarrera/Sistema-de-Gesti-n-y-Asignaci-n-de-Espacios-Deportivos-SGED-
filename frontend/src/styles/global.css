@@ -1,45 +1,60 @@
 /* ─── IMPORTS ─────────────────────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
 
-/* ─── VARIABLES ───────────────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   SGED · Tema UPTC (claro)
+   Identidad Universidad Pedagógica y Tecnológica de Colombia:
+   amarillo institucional + negro, sobre fondo blanco predominante.
+   ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  --bg:        #080d1a;
-  --surface:   #0f1623;
-  --surface2:  #162030;
-  --surface3:  #1c2a3e;
-  --border:    rgba(255,255,255,0.06);
-  --border2:   rgba(255,255,255,0.11);
+  /* ── Superficies (light) ── */
+  --bg:        #f4f5f7;   /* fondo general gris muy claro */
+  --surface:   #ffffff;   /* tarjetas / paneles */
+  --surface2:  #f6f7f9;   /* inputs, hovers suaves */
+  --surface3:  #eceef1;   /* fondos terciarios / tracks */
+  --border:    rgba(17,24,39,0.08);
+  --border2:   rgba(17,24,39,0.14);
 
-  --accent:    #3b82f6;
-  --accent2:   #06b6d4;
-  --accent-lo: rgba(59,130,246,0.12);
-  --accent-md: rgba(59,130,246,0.25);
+  /* ── Acento principal: AMARILLO UPTC ── */
+  --accent:    #f5b400;   /* amarillo institucional UPTC */
+  --accent2:   #ffce21;   /* amarillo claro para gradientes */
+  --accent-ink:#1a1206;   /* texto sobre amarillo (negro cálido) */
+  --accent-lo: rgba(245,180,0,0.14);
+  --accent-md: rgba(245,180,0,0.30);
+  --accent-text: #a16207;   /* dorado oscuro: para usar el acento como TEXTO sobre fondo claro */
 
-  --verde:     #10b981;
-  --verde-lo:  rgba(16,185,129,0.12);
-  --verde-md:  rgba(16,185,129,0.25);
+  /* ── Estados semánticos ── */
+  --verde:     #15803d;
+  --verde-lo:  rgba(21,128,61,0.12);
+  --verde-md:  rgba(21,128,61,0.24);
 
-  --amarillo:  #f59e0b;
-  --ama-lo:    rgba(245,158,11,0.12);
-  --ama-md:    rgba(245,158,11,0.25);
+  --amarillo:  #b45309;   /* ámbar oscuro para "pendiente" (legible en claro) */
+  --ama-lo:    rgba(245,180,0,0.16);
+  --ama-md:    rgba(245,180,0,0.34);
 
-  --rojo:      #ef4444;
-  --rojo-lo:   rgba(239,68,68,0.12);
-  --rojo-md:   rgba(239,68,68,0.25);
+  --rojo:      #dc2626;
+  --rojo-lo:   rgba(220,38,38,0.10);
+  --rojo-md:   rgba(220,38,38,0.26);
 
-  --text:      #eef2ff;
-  --text2:     #94a3b8;
-  --text3:     #4b5a6e;
+  /* ── Texto (negro UPTC sobre blanco) ── */
+  --text:      #14181f;   /* negro principal */
+  --text2:     #5b6675;   /* gris medio */
+  --text3:     #97a1b0;   /* gris suave / placeholders */
 
+  /* ── Tokens varios ── */
   --radius:    14px;
   --radius-sm: 8px;
   --radius-xs: 5px;
-  --shadow:    0 4px 32px rgba(0,0,0,0.5);
-  --shadow-lg: 0 12px 60px rgba(0,0,0,0.7);
+  --shadow:    0 4px 20px rgba(17,24,39,0.08);
+  --shadow-lg: 0 18px 48px rgba(17,24,39,0.16);
   --sidebar-w: 68px;
   --sidebar-expanded: 240px;
   --topbar-h:  60px;
   --transition: 0.28s cubic-bezier(0.4,0,0.2,1);
+
+  /* alias semántico de marca (negro UPTC) */
+  --uptc-black: #14181f;
+  --uptc-yellow:#f5b400;
 }
 
 /* ─── RESET ───────────────────────────────────────────────────────────────── */
@@ -60,10 +75,10 @@ input, textarea, select { font-family: inherit; }
 a { text-decoration: none; color: inherit; }
 
 /* ─── SCROLLBAR ───────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+::-webkit-scrollbar-thumb { background: #d4d8de; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #b6bcc5; }
 
 /* ─── UTILITIES ───────────────────────────────────────────────────────────── */
 .flex         { display: flex; }

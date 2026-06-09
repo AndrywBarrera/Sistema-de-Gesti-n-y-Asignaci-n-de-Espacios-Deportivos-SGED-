@@ -50,6 +50,14 @@ export async function desactivarUsuario(id) {
 }
 
 /**
+ * PUT /usuarios/activate/:id  → reactiva un usuario desactivado.
+ * Solo Administrador. No requiere body.
+ */
+export async function activarUsuario(id) {
+  return api.put(`/usuarios/activate/${id}`);
+}
+
+/**
  * GET /usuarios/stats
  * Obtiene estadísticas generales de usuarios.
  */

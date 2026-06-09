@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useReservas } from "../context/ReservasContext";
 import { useNotif } from "../context/NotifContext";
 import { StatCard, Card, CardTitle, Badge } from "../components/ui/index";
+import { formatHora } from "../utils/formatHora";
 
 const ESPACIO_EMOJI = {
   Cancha: "⚽",
@@ -47,7 +48,7 @@ export function DashboardPage({ onNavigate }) {
       <div className="page-header">
         <h1 className="page-title">
           Bienvenido,{" "}
-          <span style={{ color: "var(--accent)" }}>{primerNombre}</span>
+          <span style={{ color: "var(--accent-text)" }}>{primerNombre}</span>
         </h1>
         <p className="page-sub">
           {new Date().toLocaleDateString("es-CO", {
@@ -124,7 +125,7 @@ export function DashboardPage({ onNavigate }) {
                 <div className="dashboard-list__info">
                   <span className="dashboard-list__name">{e.nombre}</span>
                   <span className="text-sm text-muted">
-                    Cap. {e.capacidad} · {e.horarioApertura}–{e.horarioCierre}
+                    Cap. {e.capacidad} · {formatHora(e.horarioApertura)}–{formatHora(e.horarioCierre)}
                   </span>
                 </div>
                 <Badge label="Disponible" variant="Disponible" />
@@ -159,7 +160,7 @@ export function DashboardPage({ onNavigate }) {
                       {s.espacioNombre}
                     </span>
                     <span className="text-sm text-muted">
-                      {s.fecha} · {s.horarioInicio}–{s.horarioFin}
+                      {s.fecha} · {formatHora(s.horarioInicio)}–{formatHora(s.horarioFin)}
                     </span>
                   </div>
                   <Badge label={s.estado} variant={s.estado} />
@@ -200,7 +201,7 @@ export function DashboardPage({ onNavigate }) {
                       {s.espacioNombre}
                     </span>
                     <span className="text-sm text-muted">
-                      {s.fecha} · {s.horarioInicio}–{s.horarioFin} ·{" "}
+                      {s.fecha} · {formatHora(s.horarioInicio)}–{formatHora(s.horarioFin)} ·{" "}
                       {s.usuarioNombre}
                     </span>
                   </div>

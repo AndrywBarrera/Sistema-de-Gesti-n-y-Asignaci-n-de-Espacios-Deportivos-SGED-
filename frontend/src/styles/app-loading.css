@@ -21,20 +21,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 20px rgba(245,180,0,0.45);
   animation: al-pulse 2s ease-in-out infinite;
 }
 
 @keyframes al-pulse {
-  0%, 100% { box-shadow: 0 4px 24px rgba(59,130,246,0.4); }
-  50%       { box-shadow: 0 4px 40px rgba(59,130,246,0.7); }
+  0%, 100% { box-shadow: 0 4px 20px rgba(245,180,0,0.4); }
+  50%       { box-shadow: 0 4px 34px rgba(245,180,0,0.7); }
 }
 
 .app-loading__letter {
   font-family: 'Syne', sans-serif;
   font-size: 24px;
   font-weight: 800;
-  color: #fff;
+  color: var(--accent-ink);
   line-height: 1;
 }
 

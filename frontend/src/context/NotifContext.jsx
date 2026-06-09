@@ -11,15 +11,12 @@ import {
   useEffect,
 } from "react";
 import * as notifSvc from "../services/notificacionesService";
-import { NOTIFICACIONES_MOCK } from "../data/mockData";
 import { tokenStore } from "../api/client";
 
 const NotifContext = createContext(null);
 
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true";
-
 export function NotifProvider({ children }) {
-  const [notificaciones, setNotificaciones] = useState(NOTIFICACIONES_MOCK);
+  const [notificaciones, setNotificaciones] = useState([]);
   const [toast, setToast] = useState(null);
   const [loadingNotifs, setLoadingNotifs] = useState(false);
 
@@ -28,7 +25,6 @@ export function NotifProvider({ children }) {
   // ── Cargar desde API al montar ────────────────────────────────────────────
   const cargarNotificaciones = useCallback(async (params = {}) => {
     if (!tokenStore.access) return;
-    if (USE_MOCK) return; // mock ya está en el estado inicial
     setLoadingNotifs(true);
     try {
       const resp = await notifSvc.listarNotificaciones(params);
@@ -62,17 +58,13 @@ export function NotifProvider({ children }) {
     setNotificaciones((prev) =>
       prev.map((n) => (n._id === id ? { ...n, leida: true } : n)),
     );
-    if (!USE_MOCK) {
-      await notifSvc.marcarLeida(id).catch(() => {}); // fire-and-forget
-    }
+    await notifSvc.marcarLeida(id).catch(() => {}); // fire-and-forget
   }, []);
 
   // ── Marcar todas — PATCH /notificaciones/todas/leidas ────────────────────
   const marcarTodasLeidas = useCallback(async () => {
     setNotificaciones((prev) => prev.map((n) => ({ ...n, leida: true })));
-    if (!USE_MOCK) {
-      await notifSvc.marcarTodasLeidas().catch(() => {});
-    }
+    await notifSvc.marcarTodasLeidas().catch(() => {});
   }, []);
 
   // ── Agregar notificación local (del sistema, sin API) ─────────────────────

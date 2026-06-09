@@ -49,7 +49,7 @@ export function useCalendar(año, mes, espacioId, espacio) {
       if (!espacio) return "disponible";
 
       const date = new Date(año, mes, d);
-      const today = new Date(); // fecha base del mock
+      const today = new Date();
       today.setDate(today.getDate() - 1);
       if (date < today) return "pasado";
       if (date.getDay() === 0) return "noDisponible";

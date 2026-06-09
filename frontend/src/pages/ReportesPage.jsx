@@ -19,7 +19,7 @@ import { obtenerHeatmapReportes } from "../services/reportesService";
 import { obtenerTendenciaReportes } from "../services/reportesService";
 // ──────────────────────────────────────────────────────────────────────────
 
-import { StatCard, Card, CardTitle, EmptyState } from "../components/ui/index";
+import { StatCard, Card, CardTitle, EmptyState, ModalPortal } from "../components/ui/index";
 import { CustomSelect } from "../components/ui/CustomSelect";
 import { generarPDFReporte } from "../utils/pdfGenerator";
 
@@ -35,10 +35,10 @@ const FORMATO_OPTS = [
   { value: "CSV",  label: "CSV"  },
   { value: "PDF",  label: "PDF"  },
 ];
-const COLORS     = ["#3b82f6","#10b981","#f59e0b","#06b6d4","#8b5cf6","#ef4444"];
+const COLORS     = ["#f5b400","#15803d","#0891b2","#b45309","#7c3aed","#dc2626"];
 const ROL_COLORS = {
-  Estudiante:"#3b82f6", Docente:"#10b981",
-  Empleado:"#f59e0b", Administrativo:"#06b6d4", Administrador:"#8b5cf6",
+  Estudiante:"#f5b400", Docente:"#15803d",
+  Empleado:"#b45309", Administrativo:"#0891b2", Administrador:"#7c3aed",
 };
 const MESES_ES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
@@ -88,8 +88,8 @@ function generarPDF({ reporte, statsEspacios, statsUsuarios, solicitudes }) {
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Segoe UI',sans-serif;background:#fff;color:#1e293b;padding:40px}
-    .header{display:flex;align-items:center;gap:16px;margin-bottom:32px;padding-bottom:20px;border-bottom:2px solid #3b82f6}
-    .badge{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#3b82f6,#06b6d4);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#fff}
+    .header{display:flex;align-items:center;gap:16px;margin-bottom:32px;padding-bottom:20px;border-bottom:3px solid #f5b400}
+    .badge{width:48px;height:48px;border-radius:12px;background:#14181f;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:#f5b400}
     h1{font-size:22px;font-weight:700;color:#0f172a}.sub{font-size:12px;color:#64748b;margin-top:2px}
     .meta{display:flex;gap:16px;margin-bottom:28px;flex-wrap:wrap}
     .meta-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 16px}
@@ -122,15 +122,15 @@ function generarPDF({ reporte, statsEspacios, statsUsuarios, solicitudes }) {
     ${parametros?.fecha_inicio?`<div class="meta-item"><div class="meta-label">Período</div><div class="meta-value">${parametros.fecha_inicio} → ${parametros.fecha_fin??""}</div></div>`:""}
   </div>
   <div class="stats-grid">
-    <div class="stat"><div class="stat-val" style="color:#3b82f6">${total}</div><div class="stat-label">Total</div></div>
-    <div class="stat"><div class="stat-val" style="color:#10b981">${aprobadas}</div><div class="stat-label">Aprobadas</div></div>
-    <div class="stat"><div class="stat-val" style="color:#f59e0b">${pendientes}</div><div class="stat-label">Pendientes</div></div>
-    <div class="stat"><div class="stat-val" style="color:#ef4444">${rechazadas}</div><div class="stat-label">Rechazadas</div></div>
+    <div class="stat"><div class="stat-val" style="color:#b8860b">${total}</div><div class="stat-label">Total</div></div>
+    <div class="stat"><div class="stat-val" style="color:#15803d">${aprobadas}</div><div class="stat-label">Aprobadas</div></div>
+    <div class="stat"><div class="stat-val" style="color:#b45309">${pendientes}</div><div class="stat-label">Pendientes</div></div>
+    <div class="stat"><div class="stat-val" style="color:#dc2626">${rechazadas}</div><div class="stat-label">Rechazadas</div></div>
   </div>
   <div class="stats-grid">
-    <div class="stat"><div class="stat-val" style="color:#10b981">${tasa}%</div><div class="stat-label">Tasa aprobación</div></div>
-    <div class="stat"><div class="stat-val" style="color:#3b82f6">${statsEspacios?.total??0}</div><div class="stat-label">Espacios</div></div>
-    <div class="stat"><div class="stat-val" style="color:#10b981">${statsEspacios?.disponibles??0}</div><div class="stat-label">Disponibles</div></div>
+    <div class="stat"><div class="stat-val" style="color:#15803d">${tasa}%</div><div class="stat-label">Tasa aprobación</div></div>
+    <div class="stat"><div class="stat-val" style="color:#b8860b">${statsEspacios?.total??0}</div><div class="stat-label">Espacios</div></div>
+    <div class="stat"><div class="stat-val" style="color:#15803d">${statsEspacios?.disponibles??0}</div><div class="stat-label">Disponibles</div></div>
     <div class="stat"><div class="stat-val" style="color:#64748b">${statsUsuarios?.total??0}</div><div class="stat-label">Usuarios</div></div>
   </div>
   <div class="two-col">
@@ -398,9 +398,10 @@ function AnalisisModal({ open, onClose, tendencia, statsEspacios, statsUsuarios,
   }));
 
   return (
+    <ModalPortal>
     <div className="modal-overlay animate-fadeIn" onClick={onClose}>
-      <div className="modal-box animate-slideUp"
-        style={{ maxWidth:780, maxHeight:"88vh" }}
+      <div className="modal-box modal-box--scroll animate-slideUp"
+        style={{ maxWidth:780 }}
         onClick={e=>e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title font-syne">📊 Análisis avanzado</h2>
@@ -421,29 +422,31 @@ function AnalisisModal({ open, onClose, tendencia, statsEspacios, statsUsuarios,
                   <Legend wrapperStyle={{fontSize:12}} />
                   <Line type="monotone" dataKey="Aprobadas"  stroke="#10b981" strokeWidth={2} dot={{r:4}} />
                   <Line type="monotone" dataKey="Rechazadas" stroke="#ef4444" strokeWidth={2} dot={{r:4}} />
-                  <Line type="monotone" dataKey="Pendientes" stroke="#f59e0b" strokeWidth={2} dot={{r:4}} strokeDasharray="4 2" />
+                  <Line type="monotone" dataKey="Pendientes" stroke="#b45309" strokeWidth={2} dot={{r:4}} strokeDasharray="4 2" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           )}
 
           {/* Barras comparativas: Reservas vs Horas por espacio */}
-          {espacioData.length > 0 && (
-            <div>
-              <p className="rp-chart-title">Reservas vs Horas por espacio</p>
+          <div>
+            <p className="rp-chart-title">Reservas vs Horas por espacio</p>
+            {espacioData.length > 0 ? (
               <ResponsiveContainer width="100%" height={220}>
                 <ReBarChart data={espacioData} margin={{top:5,right:16,left:-20,bottom:0}}>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis dataKey="name" tick={{fontSize:10,fill:"var(--text3)"}} />
-                  <YAxis tick={{fontSize:11,fill:"var(--text3)"}} />
+                  <YAxis tick={{fontSize:11,fill:"var(--text3)"}} allowDecimals={false} />
                   <Tooltip content={<TooltipCustom/>} />
                   <Legend wrapperStyle={{fontSize:12}} />
-                  <Bar dataKey="Reservas" fill="#3b82f6" radius={[4,4,0,0]} />
-                  <Bar dataKey="Horas"    fill="#06b6d4" radius={[4,4,0,0]} />
+                  <Bar dataKey="Reservas" fill="#f5b400" radius={[4,4,0,0]} />
+                  <Bar dataKey="Horas"    fill="#0891b2" radius={[4,4,0,0]} />
                 </ReBarChart>
               </ResponsiveContainer>
-            </div>
-          )}
+            ) : (
+              <p className="rp-empty-chart">Sin datos de uso de espacios todavía.</p>
+            )}
+          </div>
 
           {/* Pie: distribución por rol */}
           {rolData.length > 0 && (
@@ -490,7 +493,7 @@ function AnalisisModal({ open, onClose, tendencia, statsEspacios, statsUsuarios,
                   <Tooltip content={<TooltipCustom/>} />
                   <Legend wrapperStyle={{fontSize:12}} />
                   <Bar dataKey="Aprobadas"  stackId="a" fill="#10b981" />
-                  <Bar dataKey="Pendientes" stackId="a" fill="#f59e0b" />
+                  <Bar dataKey="Pendientes" stackId="a" fill="#d97706" />
                   <Bar dataKey="Rechazadas" stackId="a" fill="#ef4444" radius={[4,4,0,0]} />
                 </ReBarChart>
               </ResponsiveContainer>
@@ -503,6 +506,7 @@ function AnalisisModal({ open, onClose, tendencia, statsEspacios, statsUsuarios,
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
@@ -511,8 +515,9 @@ function DetalleReporteModal({ reporte, statsEspacios, statsUsuarios, solicitude
   if (!reporte) return null;
   const { tipoReporte, formato, fechaGeneracion, parametros, datos, administradorId } = reporte;
   return (
+    <ModalPortal>
     <div className="modal-overlay animate-fadeIn" onClick={onClose}>
-      <div className="modal-box animate-slideUp" style={{maxWidth:560}}
+      <div className="modal-box modal-box--scroll animate-slideUp" style={{maxWidth:560}}
         onClick={e=>e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title font-syne">📊 Detalle del reporte</h2>
@@ -562,6 +567,7 @@ function DetalleReporteModal({ reporte, statsEspacios, statsUsuarios, solicitude
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
@@ -589,7 +595,7 @@ function BarChartSimple({ data, max }) {
 export function ReportesPage() {
   const { puede }       = useAuth();
   const { showToast }   = useNotif();
-  const { solicitudes } = useReservas();
+  const { solicitudes, recargarSolicitudes } = useReservas();
 
   const [generando,      setGenerando]      = useState(false);
   const [historial,      setHistorial]      = useState([]);
@@ -627,17 +633,20 @@ export function ReportesPage() {
   // Carga inicial: solo stats livianas + historial
   const cargarStats = useCallback(async () => {
     setLoadingStats(true);
-    try {
-      const [se, su, hm] = await Promise.all([
-        obtenerStatsEspacios(),
-        obtenerStatsUsuarios(),
-        obtenerHeatmapReportes(),
-      ]);
-      setStatsEspacios(se);
-      setStatsUsuarios(su);
-      setHeatmapData(Array.isArray(hm) ? hm : hm?.datos ?? []);
-    } catch { /* silencioso */ }
-    finally { setLoadingStats(false); }
+    const [se, su, hm] = await Promise.allSettled([
+      obtenerStatsEspacios(),
+      obtenerStatsUsuarios(),
+      obtenerHeatmapReportes(),
+    ]);
+    // Cada estadística se aplica por separado: si una falla, las demás
+    // siguen mostrándose (antes un solo fallo dejaba todo en null).
+    if (se.status === "fulfilled") setStatsEspacios(se.value);
+    if (su.status === "fulfilled") setStatsUsuarios(su.value);
+    if (hm.status === "fulfilled") {
+      const v = hm.value;
+      setHeatmapData(Array.isArray(v) ? v : v?.datos ?? []);
+    }
+    setLoadingStats(false);
   }, []);
 
   const cargarHistorial = useCallback(async () => {
@@ -653,7 +662,17 @@ export function ReportesPage() {
   useEffect(() => {
     cargarHistorial();
     cargarStats();
-  }, [cargarHistorial, cargarStats]);
+    // Refrescar solicitudes desde el servidor para que los conteos
+    // (total, aprobadas, pendientes, rechazadas) estén actualizados al entrar.
+    recargarSolicitudes?.();
+  }, [cargarHistorial, cargarStats, recargarSolicitudes]);
+
+  // Recargar estadísticas si se crea/edita/elimina un espacio en otra vista.
+  useEffect(() => {
+    const handler = () => cargarStats();
+    window.addEventListener("sged:espacios-actualizados", handler);
+    return () => window.removeEventListener("sged:espacios-actualizados", handler);
+  }, [cargarStats]);
 
   // Análisis avanzado — solo al pulsar el botón
   const generarAnalisis = async () => {
@@ -704,7 +723,7 @@ export function ReportesPage() {
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            Reportes y <span style={{color:"var(--accent)"}}>Estadísticas</span>
+            Reportes y <span style={{color:"var(--accent-text)"}}>Estadísticas</span>
           </h1>
           <p className="page-sub">Análisis de uso y gestión de espacios deportivos (RF14)</p>
         </div>
@@ -851,7 +870,7 @@ export function ReportesPage() {
           <CardTitle>Estado de espacios</CardTitle>
           {statsEspacios ? (
             <div className="rp-datos-grid">
-              {[{label:"Total",value:statsEspacios.total??0,color:"var(--accent)"},
+              {[{label:"Total",value:statsEspacios.total??0,color:"var(--accent-text)"},
                 {label:"Disponibles",value:statsEspacios.disponibles??0,color:"var(--verde)"},
                 {label:"Mantenimiento",value:statsEspacios.mantenimiento??0,color:"var(--amarillo)"},
                 {label:"Ocupados",value:statsEspacios.ocupados??0,color:"var(--rojo)"}]

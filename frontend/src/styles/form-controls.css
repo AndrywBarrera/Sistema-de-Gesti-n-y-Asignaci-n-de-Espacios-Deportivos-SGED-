@@ -55,7 +55,7 @@
 }
 .cs-trigger.is-open .cs-chevron {
   transform: rotate(180deg);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Dropdown */
@@ -65,12 +65,14 @@
   left: 0;
   right: 0;
   z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
   background: var(--surface2);
   border: 1px solid var(--accent);
   border-top: none;
   border-bottom-left-radius: var(--radius-sm);
   border-bottom-right-radius: var(--radius-sm);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 12px 32px rgba(17, 24, 39, 0.18);
 
   /* animación de entrada */
   animation: cs-open 0.18s cubic-bezier(0.4, 0, 0.2, 1) both;
@@ -102,7 +104,7 @@
 
 .cs-option.is-selected {
   background: var(--accent-lo);
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 500;
 }
 .cs-option.is-selected:hover { background: var(--accent-md); }
@@ -115,7 +117,7 @@
   width: 14px;
   height: 14px;
   flex-shrink: 0;
-  color: var(--accent);
+  color: var(--accent-text);
   opacity: 0;
   transition: opacity 0.15s;
 }
@@ -168,7 +170,7 @@
 }
 .ctp-trigger.is-open .ctp-chevron {
   transform: rotate(180deg);
-  color: var(--accent);
+  color: var(--accent-text);
 }
 
 /* Panel */
@@ -180,7 +182,7 @@
   background: var(--surface2);
   border: 1px solid var(--border2);
   border-radius: var(--radius);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 12px 32px rgba(17,24,39,0.16);
   padding: 14px 16px 12px;
   min-width: 210px;
 
@@ -263,7 +265,7 @@
 .ctp-item:hover { background: var(--surface3); color: var(--text); }
 .ctp-item.is-selected {
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-ink);
   font-weight: 600;
   border-radius: var(--radius-xs);
 }
@@ -275,7 +277,7 @@
   margin-top: 12px;
   padding: 7px;
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-ink);
   border: none;
   border-radius: var(--radius-sm);
   font-family: inherit;
@@ -285,7 +287,7 @@
   letter-spacing: 0.04em;
   transition: background var(--transition), transform 0.12s;
 }
-.ctp-ok:hover  { background: #2563eb; transform: translateY(-1px); }
+.ctp-ok:hover  { background: #e0a500; transform: translateY(-1px); }
 .ctp-ok:active { transform: translateY(0); }
 
 

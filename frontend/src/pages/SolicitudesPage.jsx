@@ -3,14 +3,16 @@ import { useReservas } from "../context/ReservasContext";
 import { useNotif } from "../context/NotifContext";
 import { useAuth } from "../context/AuthContext";
 import { RejectModal } from "../components/solicitudes/RejectModal";
-import { StatCard, Table, Badge, EmptyState } from "../components/ui/index";
+import { StatCard, Table, Badge, EmptyState, ModalPortal } from "../components/ui/index";
+import { formatHora } from "../utils/formatHora";
 
-const FILTERS = ["Todas", "Pendiente", "Aprobada", "Rechazada"];
+const FILTERS = ["Todas", "Pendiente", "Aprobada", "Rechazada","Inconcluso"];
 
 /* ── Modal: detalle de horario y motivo ───────────────────────────────────── */
 function DetalleModal({ solicitud, onClose }) {
   if (!solicitud) return null;
   return (
+    <ModalPortal>
     <div className="modal-overlay animate-fadeIn" onClick={onClose}>
       <div className="modal-box modal-box--sm animate-slideUp"
         onClick={(e) => e.stopPropagation()}>
@@ -43,13 +45,13 @@ function DetalleModal({ solicitud, onClose }) {
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                 {solicitud.horarios.map((h, i) => (
                   <span key={i} className="detalle-chip">
-                    🕐 {h}
+                    🕐 {formatHora(h)}
                   </span>
                 ))}
               </div>
             ) : (
               <span className="detalle-chip">
-                🕐 {solicitud.horarioInicio} – {solicitud.horarioFin}
+                🕐 {formatHora(solicitud.horarioInicio)} – {formatHora(solicitud.horarioFin)}
               </span>
             )}
           </div>
@@ -75,6 +77,7 @@ function DetalleModal({ solicitud, onClose }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
@@ -82,6 +85,7 @@ function DetalleModal({ solicitud, onClose }) {
 function MotivoModal({ solicitud, onClose }) {
   if (!solicitud) return null;
   return (
+    <ModalPortal>
     <div className="modal-overlay animate-fadeIn" onClick={onClose}>
       <div className="modal-box modal-box--sm animate-slideUp"
         onClick={(e) => e.stopPropagation()}>
@@ -105,6 +109,7 @@ function MotivoModal({ solicitud, onClose }) {
         </div>
       </div>
     </div>
+    </ModalPortal>
   );
 }
 
@@ -149,6 +154,8 @@ export function SolicitudesPage() {
       await aprobarSolicitud(id);
       agregar("Confirmacion", `Una solicitud ha sido aprobada por ${user.nombre}.`);
       showToast("✓ Solicitud aprobada y notificación enviada.");
+    } catch (err) {
+      showToast(err?.message ?? "No se pudo aprobar la solicitud.", "danger");
     } finally {
       setProcesandoId(id, false);
     }
@@ -160,9 +167,11 @@ export function SolicitudesPage() {
       await rechazarSolicitud(id, justificacion);
       agregar("Rechazo", `Una solicitud fue rechazada. Motivo: ${justificacion}`);
       showToast("Solicitud rechazada. El solicitante fue notificado.");
+      setRejectTarget(null);
+    } catch (err) {
+      showToast(err?.message ?? "No se pudo rechazar la solicitud.", "danger");
     } finally {
       setProcesandoId(id, false);
-      setRejectTarget(null);
     }
   };
 
@@ -170,7 +179,7 @@ export function SolicitudesPage() {
     <div className="page animate-fadeIn">
       <div className="page-header">
         <h1 className="page-title">
-          Gestión de <span style={{ color: "var(--accent)" }}>Solicitudes</span>
+          Gestión de <span style={{ color: "var(--accent-text)" }}>Solicitudes</span>
         </h1>
         <p className="page-sub">
           Aprueba o rechaza solicitudes de reserva de espacios deportivos (RF08–RF10)
@@ -182,6 +191,7 @@ export function SolicitudesPage() {
         <StatCard label="Pendientes" value={solicitudes.filter((s) => s.estado === "Pendiente").length}  color="amarillo" />
         <StatCard label="Aprobadas"  value={solicitudes.filter((s) => s.estado === "Aprobada").length}   color="verde"    />
         <StatCard label="Rechazadas" value={solicitudes.filter((s) => s.estado === "Rechazada").length}  color="rojo"     />
+        <StatCard label="Inconclusas" value={solicitudes.filter((s) => s.estado === "Inconcluso").length}  color="gris"   />
       </div>
 
       <div className="filter-tabs">
@@ -220,7 +230,7 @@ export function SolicitudesPage() {
                     onClick={() => setDetalleTarget(s)}
                     title="Ver horario y motivo completo"
                   >
-                    🕐 {s.horarioInicio}–{s.horarioFin}
+                    🕐 {formatHora(s.horarioInicio)}–{formatHora(s.horarioFin)}
                   </button>
                 </td>
 

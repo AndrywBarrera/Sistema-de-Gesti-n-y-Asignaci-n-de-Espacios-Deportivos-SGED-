@@ -2,7 +2,7 @@
  * context/AuthContext.jsx
  * Gestión de sesión con JWT real.
  * Conecta con authService → /api/v1/auth
- * En desarrollo (VITE_USE_MOCK=true) usa datos mock sin backend.
+ * Conecta siempre con el backend real.
  */
 import {
   createContext,
@@ -13,7 +13,7 @@ import {
 } from "react";
 import * as authService from "../services/authService";
 import { tokenStore } from "../api/client"; // ← añade este import
-import { PERMISOS } from "../data/mockData";
+import { PERMISOS } from "../data/constants";
 import { listarEspacios } from "../services/espaciosService";
 
 
@@ -64,6 +64,16 @@ export function AuthProvider({ children }) {
     return () => window.removeEventListener("sged:session-expired", handler);
   }, []);
 
+  // Si se crea/edita/elimina un espacio en otra vista, recargar la lista
+  // global de espacios (la usa el calendario).
+  useEffect(() => {
+    const handler = () => {
+      if (tokenStore.access) cargarEspacios().catch(() => {});
+    };
+    window.addEventListener("sged:espacios-actualizados", handler);
+    return () => window.removeEventListener("sged:espacios-actualizados", handler);
+  }, []);
+
   /** POST /auth/login */
   const login = useCallback(async (correo, password) => {
     setLoading(true);
@@ -95,7 +105,6 @@ export function AuthProvider({ children }) {
     } finally {
       setUser(null);
       setError(null);
-      sessionStorage.removeItem("sged_mock_user"); // limpia mock también
     }
   }, []);
 

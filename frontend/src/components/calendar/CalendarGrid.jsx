@@ -1,4 +1,4 @@
-import { DIAS_SEMANA_CORTO } from "../../data/mockData";
+import { DIAS_SEMANA_CORTO } from "../../data/constants";
 import { useCalendar } from "../../hooks/useCalendar";
 
 const STATUS_CLASS = {
@@ -80,7 +80,7 @@ export function CalendarGrid({ año, mes, espacioId, espacio, selectedDay, onDay
           { label: "Mantenimiento", cls: "dot--gris" },
         ].map(({ label, cls }) => (
           <div key={label} className="cal-legend__item">
-            <span className={`cal-day__dot ${cls}`} style={{ position: "static" }} />
+            <span className={`cal-day__dot cal-dot-type ${cls}`} style={{ position: "static" }} />
             <span>{label}</span>
           </div>
         ))}
